@@ -2,9 +2,8 @@
 using demoCrawler.src.DbConnection;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace demoCrawler.src.Repository
 {
@@ -18,7 +17,34 @@ namespace demoCrawler.src.Repository
 
         public bool Add(Car car)
         {
-            throw new NotImplementedException();
+            string querySql = "insert into car values (@Id, @Model, @Price, @Link, @ImageUrl)";
+            try
+            {
+                _connectionFactory.GetConnection.Execute(querySql, car);
+                
+            }catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                return false;
+            }
+            return true;
+        }
+
+        public bool AddCars(List<Car> cars)
+        {
+            string querySql = "insert into car values (@Id, @Model, @Price, @Link, @ImageUrl)";
+            IDbTransaction trans = _connectionFactory.GetConnection.BeginTransaction();
+            try
+            {
+                _connectionFactory.GetConnection.Execute(querySql, cars, transaction: trans);
+                trans.Commit();
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                return false;
+            }
+            return true;
         }
 
         public bool Delete(int id)

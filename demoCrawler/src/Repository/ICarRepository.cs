@@ -12,6 +12,7 @@ namespace demoCrawler.src.Repository
         bool Add(Car car);
         bool Update(Car car);
         bool Delete(int id);
+        bool AddCars(List<Car> cars);
         IEnumerable<Car> GetAll();
     }
 }

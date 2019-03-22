@@ -1,4 +1,6 @@
-﻿using HtmlAgilityPack;
+﻿using demoCrawler.src.DbConnection;
+using demoCrawler.src.Repository;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,10 +21,12 @@ namespace demoCrawler
 
         private static async Task startCrawlerasync()
         {
+            ConnectionFactory connection = new ConnectionFactory();
+            connection.GetConnection();
             // the url of the page we want test
             var url = "http://www.automobile.tn/neuf/bmw.3/";
             var httpClient = new HttpClient();
-
+            
             // recover html page from url
             string html = await httpClient.GetStringAsync(url);
 
@@ -39,9 +43,11 @@ namespace demoCrawler
             string priceHtml;
             foreach(HtmlNode div in divs)
             {
+                CarRepository carRepository();
                 priceHtml = div.SelectSingleNode(".//div[@class='price']/span").InnerText.Substring(0, div.SelectSingleNode(".//div[@class='price']/span").InnerHtml.IndexOf('<'));
                 if (int.TryParse(Regex.Replace(priceHtml.Trim(), @"\s+", ""), out price))
                 {
+                   
                     var car = new Car
                     {
                         Model = div.Descendants("h2").FirstOrDefault().InnerText,
@@ -50,6 +56,8 @@ namespace demoCrawler
                         ImageUrl = div.Descendants("img").FirstOrDefault().ChildAttributes("src").FirstOrDefault().Value
                     };
                     cars.Add(car);
+                    carRepository.AddCars(cars);
+
                 }
                 else
                     throw new Exception();

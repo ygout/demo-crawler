@@ -86,8 +86,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\Common\DbMySqlUtils.cs" />
-    <Compile Include="src\Common\DBUtils.cs" />
     <Compile Include="src\DbConnection\ConnectionFactory.cs" />
     <Compile Include="src\DbConnection\IConnectionFactory.cs" />
     <Compile Include="src\Entities\Car.cs" />

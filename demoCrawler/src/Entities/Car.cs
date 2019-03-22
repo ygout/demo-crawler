@@ -9,11 +9,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace demoCrawler
 {
+
     [DebuggerDisplay("{Model}, {Price}")]
     class Car
     {
         [Key]
-        public long Id { get; set; }
+        public long? Id { get; set; }
         public string Model { get; set; }
         public int Price { get; set; }
         public string Link { get; set; }

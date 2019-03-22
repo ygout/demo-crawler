@@ -16,10 +16,21 @@ namespace demoCrawler.src.DbConnection
         {
             get
             {
-                DbProviderFactory factory = DbProviderFactories.GetFactory("System.Data.SqlClient");
-                var conn = factory.CreateConnection();
+                Console.WriteLine("Get connection");
+                DbProviderFactory factory = DbProviderFactories.GetFactory("MySql.Data.MySqlClient");
+                System.Data.Common.DbConnection conn = factory.CreateConnection();
+                Console.WriteLine($"connectionString {connectionString}");
                 conn.ConnectionString = connectionString;
                 conn.Open();
+                Console.WriteLine("Connection open");
+                if (conn.State == ConnectionState.Open)
+                {
+                    Console.WriteLine("Connection working");
+                }
+                else
+                {
+                    Console.WriteLine("Connection failed");
+                }
                 return conn;
             }
         }

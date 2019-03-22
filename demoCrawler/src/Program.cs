@@ -15,14 +15,13 @@ namespace demoCrawler
     {
         static void Main(string[] args)
         {
-            startCrawlerasync();
+            StartCrawlerasync().GetAwaiter().GetResult(); ;
             Console.ReadLine();
         }
 
-        private static async Task startCrawlerasync()
+        private static async Task StartCrawlerasync()
         {
-            ConnectionFactory connection = new ConnectionFactory();
-            connection.GetConnection();
+            Console.WriteLine("Started...");
             // the url of the page we want test
             var url = "http://www.automobile.tn/neuf/bmw.3/";
             var httpClient = new HttpClient();
@@ -43,7 +42,6 @@ namespace demoCrawler
             string priceHtml;
             foreach(HtmlNode div in divs)
             {
-                CarRepository carRepository();
                 priceHtml = div.SelectSingleNode(".//div[@class='price']/span").InnerText.Substring(0, div.SelectSingleNode(".//div[@class='price']/span").InnerHtml.IndexOf('<'));
                 if (int.TryParse(Regex.Replace(priceHtml.Trim(), @"\s+", ""), out price))
                 {
@@ -56,14 +54,25 @@ namespace demoCrawler
                         ImageUrl = div.Descendants("img").FirstOrDefault().ChildAttributes("src").FirstOrDefault().Value
                     };
                     cars.Add(car);
-                    carRepository.AddCars(cars);
 
                 }
                 else
+                {
+                    Console.WriteLine("Error parsing");
                     throw new Exception();
+                    
+                }
+                    
                 
 
             }
+
+            // Insertion to Mysql
+            Console.WriteLine("Bdd connection");
+            ConnectionFactory conn = new ConnectionFactory();
+            CarRepository carRepository = new CarRepository(conn);
+            carRepository.AddCars(cars);
+            Console.WriteLine("Finished ");
         }
     }
 }

@@ -33,9 +33,10 @@ namespace demoCrawler.src.Repository
         public bool AddCars(List<Car> cars)
         {
             string querySql = "insert into car values (@Id, @Model, @Price, @Link, @ImageUrl)";
-            IDbTransaction trans = _connectionFactory.GetConnection.BeginTransaction();
+
             try
             {
+                IDbTransaction trans = _connectionFactory.GetConnection.BeginTransaction();
                 _connectionFactory.GetConnection.Execute(querySql, cars, transaction: trans);
                 trans.Commit();
             }
